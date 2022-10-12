@@ -1,0 +1,39 @@
+.maze {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  background-color: #000;
+  gap: 1px;
+  padding: 1px;
+  margin-top: 10px;
+}
+
+.tile-wrapper {
+  background-color: #fff;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #dedede;
+  }
+
+  &.no-selection {
+    background-color: transparent;
+
+    &:hover {
+      cursor: initial;
+      background-color: transparent;
+    }
+  }
+
+  &.starting-tile {
+    background-color: #f99;
+  }
+
+  &.exit-tile {
+    background-color: #9cf;
+  }
+
+  &.wall-tile {
+    background-color: #000;
+  }
+}

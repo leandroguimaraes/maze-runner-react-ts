@@ -1,7 +1,8 @@
 import "./App.scss";
+import Maze from "./Maze";
 
 function App() {
-  return <div className="App"></div>;
+  return <Maze />;
 }
 
 export default App;
