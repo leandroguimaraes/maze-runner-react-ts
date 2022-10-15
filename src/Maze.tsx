@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./Maze.scss";
 import Tile from "./Tile";
 
