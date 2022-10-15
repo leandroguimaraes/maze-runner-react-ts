@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Maze.scss";
 import Tile from "./Tile";
 
 function Maze() {
   enum MazeState {
-    SelectStartingEndPoints,
+    DefineMazeSize,
+    SelectStartingPoint,
+    SelectExitPoint,
     Play,
   }
 
@@ -15,25 +17,49 @@ function Maze() {
     Path,
   }
 
-  let currMazeState = MazeState.Play;
-
   const tileSize = 40;
 
-  const mazeWidth = 5;
-  const mazeHeight = 5;
+  const [mazeSize, setMazeSize] = useState(10);
 
-  let startingTile = "4,0";
-  let exitTile = "1,4";
+  const [startingTile, setStartingTile] = useState("");
+  const [exitTile, setExitTile] = useState("");
 
-  let walls = new Set<string>(["0,1", "2,2"]);
+  const [walls] = useState(new Set<string>());
 
-  const [tiles, setTiles] = useState(
-    buildMaze(currMazeState, mazeWidth, mazeHeight)
+  const [currMazeState, setCurrMazeState] = useState(
+    MazeState.SelectStartingPoint
   );
 
+  const [tiles, setTiles] = useState(buildMaze());
+
+  useEffect(() => {
+    setTiles(buildMaze());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currMazeState, mazeSize, startingTile, exitTile, walls, tiles]);
+
   function onTileClick(row: number, col: number): void {
-    console.log(`${row} - ${col}`);
-    setTiles(tiles);
+    const currTile = `${row},${col}`;
+
+    if (currMazeState !== MazeState.Play) {
+      if (!startingTile) {
+        setStartingTile(currTile);
+        setCurrMazeState(MazeState.SelectExitPoint);
+      } else if (!exitTile && currTile !== startingTile) {
+        setExitTile(currTile);
+        setCurrMazeState(MazeState.Play);
+      }
+    } else {
+      if (currTile !== startingTile && currTile !== exitTile) {
+        if (walls.has(currTile)) {
+          walls.delete(currTile);
+        } else {
+          walls.add(currTile);
+        }
+      }
+
+      setCurrMazeState(MazeState.Play);
+    }
   }
 
   function getTileType(row: number, col: number): TileType {
@@ -44,23 +70,19 @@ function Maze() {
     return TileType.Path;
   }
 
-  function buildMaze(
-    mazeState: MazeState,
-    width: number,
-    height: number
-  ): any[] {
+  function buildMaze(): any[] {
     const noSelection = new Set<string>();
-    if (mazeState === MazeState.SelectStartingEndPoints) {
-      for (let row = 1; row < width - 1; row++) {
-        for (let col = 1; col < height - 1; col++) {
+    if (currMazeState !== MazeState.Play) {
+      for (let row = 1; row < mazeSize - 1; row++) {
+        for (let col = 1; col < mazeSize - 1; col++) {
           noSelection.add(`${row},${col}`);
         }
       }
     }
 
     const newTiles = [];
-    for (let row = 0; row < width; row++) {
-      for (let col = 0; col < height; col++) {
+    for (let row = 0; row < mazeSize; row++) {
+      for (let col = 0; col < mazeSize; col++) {
         const tileType = getTileType(row, col);
 
         newTiles.push(
@@ -83,15 +105,35 @@ function Maze() {
   }
 
   return (
-    <div
-      className="maze"
-      style={{
-        width: mazeWidth * tileSize + mazeWidth - 1 + "px",
-        height: mazeHeight * tileSize + mazeHeight - 1 + "px",
-      }}
-    >
-      {tiles}
-    </div>
+    <>
+      {currMazeState === MazeState.DefineMazeSize ? (
+        <div>
+          Define your maze size: <input type="number">20</input>
+        </div>
+      ) : currMazeState === MazeState.SelectStartingPoint ? (
+        <div>Select a starting point.</div>
+      ) : currMazeState === MazeState.SelectExitPoint ? (
+        <div>Select an exit point.</div>
+      ) : (
+        <div>
+          <p>
+            Freely create your maze then click "Escape!" when you're done.{" "}
+            <button>Escape!</button>
+          </p>
+        </div>
+      )}
+      {mazeSize > 0 && (
+        <div
+          className="maze"
+          style={{
+            width: mazeSize * tileSize + mazeSize - 1 + "px",
+            height: mazeSize * tileSize + mazeSize - 1 + "px",
+          }}
+        >
+          {tiles}
+        </div>
+      )}
+    </>
   );
 }
 
