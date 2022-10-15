@@ -73,7 +73,6 @@ function Maze() {
       }
     }
 
-    console.log("--- walls", walls);
     const newTiles = [];
     for (let row = 0; row < mazeSize; row++) {
       for (let col = 0; col < mazeSize; col++) {
