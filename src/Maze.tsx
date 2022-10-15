@@ -24,22 +24,15 @@ function Maze() {
   const [startingTile, setStartingTile] = useState("");
   const [exitTile, setExitTile] = useState("");
 
-  const [walls] = useState(new Set<string>());
+  const [walls, setWalls] = useState(new Set<string>());
 
   const [currMazeState, setCurrMazeState] = useState(
     MazeState.SelectStartingPoint
   );
 
-  const [tiles, setTiles] = useState(buildMaze());
-
-  useEffect(() => {
-    setTiles(buildMaze());
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currMazeState, mazeSize, startingTile, exitTile, walls, tiles]);
-
   function onTileClick(row: number, col: number): void {
     const currTile = `${row},${col}`;
+    const currWalls = new Set<string>(walls.keys());
 
     if (currMazeState !== MazeState.Play) {
       if (!startingTile) {
@@ -51,14 +44,14 @@ function Maze() {
       }
     } else {
       if (currTile !== startingTile && currTile !== exitTile) {
-        if (walls.has(currTile)) {
-          walls.delete(currTile);
+        if (currWalls.has(currTile)) {
+          currWalls.delete(currTile);
         } else {
-          walls.add(currTile);
+          currWalls.add(currTile);
         }
       }
 
-      setCurrMazeState(MazeState.Play);
+      setWalls(currWalls);
     }
   }
 
@@ -70,7 +63,7 @@ function Maze() {
     return TileType.Path;
   }
 
-  function buildMaze(): any[] {
+  function Board(): JSX.Element {
     const noSelection = new Set<string>();
     if (currMazeState !== MazeState.Play) {
       for (let row = 1; row < mazeSize - 1; row++) {
@@ -80,6 +73,7 @@ function Maze() {
       }
     }
 
+    console.log("--- walls", walls);
     const newTiles = [];
     for (let row = 0; row < mazeSize; row++) {
       for (let col = 0; col < mazeSize; col++) {
@@ -101,7 +95,7 @@ function Maze() {
       }
     }
 
-    return newTiles;
+    return <>{newTiles}</>;
   }
 
   return (
@@ -130,7 +124,7 @@ function Maze() {
             height: mazeSize * tileSize + mazeSize - 1 + "px",
           }}
         >
-          {tiles}
+          <Board />
         </div>
       )}
     </>
