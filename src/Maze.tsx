@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
+import { Maze } from "./lib/Maze";
 import "./Maze.scss";
 import Tile from "./Tile";
 
-function Maze() {
+function MazePage() {
   enum MazeState {
     DefineMazeSize,
     SelectStartingPoint,
@@ -30,6 +31,8 @@ function Maze() {
   const [route, setRoute] = useState(new Set<string>());
 
   const [currMazeState, setCurrMazeState] = useState(MazeState.DefineMazeSize);
+
+  const [hasNoSolution, setHasNoSolutionState] = useState(false);
 
   function onCreateMazeClick(): void {
     const mazeSize = Number(mazeSizeInput.current?.value);
@@ -60,8 +63,16 @@ function Maze() {
         }
       }
 
+      route.clear();
       setWalls(currWalls);
     }
+  }
+
+  function onEscapeClick(): void {
+    const route = Maze.generateRoute(mazeSize, startingTile, exitTile, walls);
+    setHasNoSolutionState(route.length === 0);
+
+    setRoute(new Set<string>(route));
   }
 
   function getTileType(row: number, col: number): TileType {
@@ -133,7 +144,13 @@ function Maze() {
       ) : (
         <>
           <p>Freely create your maze then click "Escape!" when you're done.</p>
-          <button>Escape!</button>
+          <button onClick={onEscapeClick}>Escape!</button>
+        </>
+      )}
+      {hasNoSolution && (
+        <>
+          <br />
+          <p className="no-solution">You're trapped! There is no way out!</p>
         </>
       )}
       {mazeSize > 0 && (
@@ -151,4 +168,4 @@ function Maze() {
   );
 }
 
-export default Maze;
+export default MazePage;

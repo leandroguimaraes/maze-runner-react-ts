@@ -46,3 +46,11 @@ input.maze-size {
     background-color: #000;
   }
 }
+
+.no-solution {
+  display: inline-block;
+  font-weight: bold;
+  background-color: #f00;
+  color: #fff;
+  padding: 5px 10px;
+}
