@@ -126,12 +126,10 @@ function Maze() {
       ) : currMazeState === MazeState.SelectExitPoint ? (
         <div>Select an exit point.</div>
       ) : (
-        <div>
-          <p>
-            Freely create your maze then click "Escape!" when you're done.{" "}
-            <button>Escape!</button>
-          </p>
-        </div>
+        <>
+          <p>Freely create your maze then click "Escape!" when you're done.</p>
+          <button>Escape!</button>
+        </>
       )}
       {mazeSize > 0 && (
         <div
