@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./Maze.scss";
 import Tile from "./Tile";
 
@@ -19,16 +19,23 @@ function Maze() {
 
   const tileSize = 40;
 
-  const [mazeSize, setMazeSize] = useState(10);
+  const mazeSizeInput = useRef<HTMLInputElement>(null);
+  const [mazeSize, setMazeSize] = useState(0);
 
   const [startingTile, setStartingTile] = useState("");
   const [exitTile, setExitTile] = useState("");
 
   const [walls, setWalls] = useState(new Set<string>());
 
-  const [currMazeState, setCurrMazeState] = useState(
-    MazeState.SelectStartingPoint
-  );
+  const [currMazeState, setCurrMazeState] = useState(MazeState.DefineMazeSize);
+
+  function onCreateMazeClick(): void {
+    const mazeSize = Number(mazeSizeInput.current?.value);
+    if (mazeSize > 0) {
+      setMazeSize(mazeSize);
+      setCurrMazeState(MazeState.SelectStartingPoint);
+    }
+  }
 
   function onTileClick(row: number, col: number): void {
     const currTile = `${row},${col}`;
@@ -100,9 +107,20 @@ function Maze() {
   return (
     <>
       {currMazeState === MazeState.DefineMazeSize ? (
-        <div>
-          Define your maze size: <input type="number">20</input>
-        </div>
+        <>
+          <div>
+            Define your maze size:
+            <input
+              ref={mazeSizeInput}
+              type="number"
+              defaultValue="20"
+              className="maze-size"
+            ></input>
+          </div>
+          <button className="btn-create-maze" onClick={onCreateMazeClick}>
+            Create Maze
+          </button>
+        </>
       ) : currMazeState === MazeState.SelectStartingPoint ? (
         <div>Select a starting point.</div>
       ) : currMazeState === MazeState.SelectExitPoint ? (
