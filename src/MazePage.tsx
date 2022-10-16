@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Maze } from "./lib/Maze";
-import "./Maze.scss";
+import "./MazePage.scss";
 import Tile from "./Tile";
 
 function MazePage() {

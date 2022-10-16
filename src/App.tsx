@@ -1,11 +1,11 @@
 import "./App.scss";
-import Maze from "./Maze";
+import MazePage from "./MazePage";
 
 function App() {
   return (
     <div className="wrapper">
       <h1>Maze Runner</h1>
-      <Maze />
+      <MazePage />
     </div>
   );
 }
