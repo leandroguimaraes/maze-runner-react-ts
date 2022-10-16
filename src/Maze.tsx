@@ -15,6 +15,7 @@ function Maze() {
     Exit,
     Wall,
     Path,
+    Route,
   }
 
   const tileSize = 40;
@@ -26,6 +27,7 @@ function Maze() {
   const [exitTile, setExitTile] = useState("");
 
   const [walls, setWalls] = useState(new Set<string>());
+  const [route, setRoute] = useState(new Set<string>());
 
   const [currMazeState, setCurrMazeState] = useState(MazeState.DefineMazeSize);
 
@@ -66,6 +68,7 @@ function Maze() {
     if (startingTile === `${row},${col}`) return TileType.Starting;
     if (exitTile === `${row},${col}`) return TileType.Exit;
     if (walls.has(`${row},${col}`)) return TileType.Wall;
+    if (route.has(`${row},${col}`)) return TileType.Route;
 
     return TileType.Path;
   }
@@ -92,7 +95,9 @@ function Maze() {
               noSelection.has(`${row},${col}`) ? "no-selection" : ""
             } ${tileType === TileType.Starting ? "starting-tile" : ""} ${
               tileType === TileType.Exit ? "exit-tile" : ""
-            } ${tileType === TileType.Wall ? "wall-tile" : ""}`}
+            } ${tileType === TileType.Wall ? "wall-tile" : ""} ${
+              tileType === TileType.Route ? "route-tile" : ""
+            }`}
             key={`${row},${col}`}
           >
             <Tile size={tileSize} />
