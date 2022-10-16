@@ -9,11 +9,10 @@ input.maze-size {
 .maze {
   display: flex;
   flex-wrap: wrap;
-  margin: auto;
+  margin: 10px auto;
   background-color: #000;
   gap: 1px;
   padding: 1px;
-  margin-top: 10px;
 }
 
 .tile-wrapper {
