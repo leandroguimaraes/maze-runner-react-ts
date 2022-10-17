@@ -23,15 +23,6 @@ input.maze-size {
     background-color: #dedede;
   }
 
-  &.no-selection {
-    background-color: transparent;
-
-    &:hover {
-      cursor: initial;
-      background-color: transparent;
-    }
-  }
-
   &.starting-tile,
   &.route-tile {
     background-color: #f99;

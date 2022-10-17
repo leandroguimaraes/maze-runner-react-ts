@@ -85,15 +85,6 @@ function MazePage() {
   }
 
   function Board(): JSX.Element {
-    const noSelection = new Set<string>();
-    if (currMazeState !== MazeState.Play) {
-      for (let row = 1; row < mazeSize - 1; row++) {
-        for (let col = 1; col < mazeSize - 1; col++) {
-          noSelection.add(`${row},${col}`);
-        }
-      }
-    }
-
     const newTiles = [];
     for (let row = 0; row < mazeSize; row++) {
       for (let col = 0; col < mazeSize; col++) {
@@ -103,12 +94,10 @@ function MazePage() {
           <div
             onClick={() => onTileClick(row, col)}
             className={`tile-wrapper ${
-              noSelection.has(`${row},${col}`) ? "no-selection" : ""
-            } ${tileType === TileType.Starting ? "starting-tile" : ""} ${
-              tileType === TileType.Exit ? "exit-tile" : ""
-            } ${tileType === TileType.Wall ? "wall-tile" : ""} ${
-              tileType === TileType.Route ? "route-tile" : ""
-            }`}
+              tileType === TileType.Starting ? "starting-tile" : ""
+            } ${tileType === TileType.Exit ? "exit-tile" : ""} ${
+              tileType === TileType.Wall ? "wall-tile" : ""
+            } ${tileType === TileType.Route ? "route-tile" : ""}`}
             key={`${row},${col}`}
           >
             <Tile size={tileSize} />
@@ -129,7 +118,7 @@ function MazePage() {
             <input
               ref={mazeSizeInput}
               type="number"
-              defaultValue="20"
+              defaultValue="10"
               className="maze-size"
             ></input>
           </div>
