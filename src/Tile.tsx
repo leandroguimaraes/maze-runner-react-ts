@@ -1,12 +1,10 @@
 import "./Tile.scss";
 
-function Tile(props: any) {
-  const size: number = props.size;
-
+function Tile(props: { size: number }) {
   return (
     <div
       className="tile"
-      style={{ width: size + "px", height: size + "px" }}
+      style={{ width: props.size + "px", height: props.size + "px" }}
     ></div>
   );
 }
